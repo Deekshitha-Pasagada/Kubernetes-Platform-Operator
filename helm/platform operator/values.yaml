@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: platform-operator
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  name: "platform-operator"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+operator:
+  reconcileInterval: 30
+  namespace: default
+  logLevel: INFO
+
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s

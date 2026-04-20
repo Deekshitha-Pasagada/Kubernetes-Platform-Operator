@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: platform-operator-rules
+  labels:
+    app: platform-operator
+spec:
+  groups:
+    - name: platform-operator.rules
+      interval: 30s
+      rules:
+        - alert: PlatformAppDegraded
+          expr: |
+            platform_app_available_replicas
+            < platform_app_desired_replicas
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PlatformApp {{ $labels.app }} is degraded"
+            description: >
+              Available replicas {{ $value }} < desired replicas
+              for app {{ $labels.app }}
+
+        - alert: PlatformAppDown
+          expr: platform_app_available_replicas == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PlatformApp {{ $labels.app }} is down"
+            description: >
+              No available replicas for app {{ $labels.app }}
+
+        - alert: OperatorReconcileError
+          expr: increase(operator_reconcile_errors_total[5m]) > 0
+          labels:
+            severity: warning
+          annotations:
+            summary: "Platform Operator reconcile errors detected"

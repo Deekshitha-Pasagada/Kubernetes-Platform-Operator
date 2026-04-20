@@ -1,0 +1,13 @@
+apiVersion: v2
+name: platform-operator
+description: Kubernetes Platform Operator for automated deployment lifecycle management
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - kubernetes
+  - operator
+  - platform-engineering
+  - infrastructure
+maintainers:
+  - name: Deekshitha Pasagada
